@@ -17,12 +17,27 @@ from config import (
 )
 from validators import digits_only
 import re
+import os
+import sys
 
 class QuestionCreatorApp:
     def __init__(self, root):
         self.root = root
         self.root.title(WINDOW_TITLE)
         self.root.geometry(WINDOW_GEOMETRY)
+
+        # ウィンドウ/タスクバーのアイコン設定（PyInstaller対応）
+        def _resource_path(relative_path: str) -> str:
+            try:
+                base_path = sys._MEIPASS  # type: ignore[attr-defined]
+            except Exception:
+                base_path = os.path.abspath(".")
+            return os.path.join(base_path, relative_path)
+
+        try:
+            self.root.iconbitmap(_resource_path("icon/examsmith.ico"))
+        except Exception:
+            pass
 
         # プロンプト生成フラグ
         self.prompt_generated = False
